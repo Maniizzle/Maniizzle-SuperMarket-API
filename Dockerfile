@@ -26,3 +26,31 @@ COPY --from=publish /app/publish .
 # ENTRYPOINT ["dotnet", "Colors.API.dll"]
 # heroku uses the following
 CMD ASPNETCORE_URLS=http://*:$PORT dotnet Supermarket.API.dll
+
+
+
+# NuGet restore
+FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build
+WORKDIR /src
+COPY *.sln .
+COPY Supermarket.API/*.csproj Supermarket.API/
+RUN dotnet restore
+COPY . .
+
+# testing
+FROM build AS testing
+WORKDIR /src/Supermarket.API
+RUN dotnet build
+
+
+# publish
+FROM build AS publish
+WORKDIR /src/Supermarket.API
+RUN dotnet publish -c Release -o /src/publish
+
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.2 AS runtime
+WORKDIR /app
+COPY --from=publish /src/publish .
+# ENTRYPOINT ["dotnet", "Supermarket.API.dll"]
+# heroku uses the following
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet Colors.API.dll
