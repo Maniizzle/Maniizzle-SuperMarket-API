@@ -7,12 +7,17 @@ using System.Threading.Tasks;
 
 namespace Supermarket.API.Persistence.Context
 {
-    public class AppDbContext:DbContext
+    public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options):base(options)
+        public DbSet<WeatherForecast> WeatherForecast { get; set; }
+        public DbSet<Value> Values { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Photo> Photos { get; set; }
+
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-             
         }
+
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
 

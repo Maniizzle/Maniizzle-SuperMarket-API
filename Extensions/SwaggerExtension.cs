@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Supermarket.API.Persistence.Context;
 
 //using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.SwaggerUI;
@@ -18,6 +19,7 @@ namespace Supermarket.API.Extensions
         {
             // Enable middleware to serve generated Swagger as a JSON endpoint
             app.UseSwagger();
+
             // Enable middleware to serve swagger - ui assets(HTML, JS, CSS etc.)
             app.UseSwaggerUI(c =>
             {
@@ -33,29 +35,29 @@ namespace Supermarket.API.Extensions
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = title, Version = "v1" });
 
-                //var securityScheme = new OpenApiSecurityScheme()
-                //{
-                //    Scheme = "Bearer",
-                //    BearerFormat = "JWT",
-                //    Type = SecuritySchemeType.ApiKey,
-                //    Description = "Jwt Authorization header using the bearer scheme",
-                //    Name = "Authorization",
-                //    In = ParameterLocation.Header,
-                //    Reference = new OpenApiReference
-                //    {
-                //        Type = ReferenceType.SecurityScheme,
-                //        Id = "Bearer"
-                //    }
-                //};
+                var securityScheme = new OpenApiSecurityScheme()
+                {
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    Type = SecuritySchemeType.ApiKey,
+                    Description = "Jwt Authorization header using the bearer scheme",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                };
 
-                //c.AddSecurityDefinition("Bearer", securityScheme);
+                c.AddSecurityDefinition("Bearer", securityScheme);
 
-                //var securityRequirement = new OpenApiSecurityRequirement
-                //{
-                //    { securityScheme, new List<string>() }
-                //};
+                var securityRequirement = new OpenApiSecurityRequirement
+                {
+                    { securityScheme, new List<string>() }
+                };
 
-                //c.AddSecurityRequirement(securityRequirement);
+                c.AddSecurityRequirement(securityRequirement);
 
                 //var security = new Dictionary<string, IEnumerable<string>>
                 //{

@@ -9,10 +9,13 @@ using System.Threading.Tasks;
 
 namespace Supermarket.API.Persistence.Repositories
 {
-    public class CategoryRepository : BaseRepository, ICategoryRepository
+    public class CategoryRepository : ICategoryRepository
     {
-        public CategoryRepository(AppDbContext context) : base(context)
+        private readonly AppDbContext context;
+
+        public CategoryRepository(AppDbContext context)
         {
+            this.context = context;
         }
 
         public async Task<IEnumerable<Category>> ListAsync()
