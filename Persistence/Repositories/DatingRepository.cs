@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Supermarket.API.Domain.Model;
 using Supermarket.API.Persistence.Context;
 
-namespace DatingAppAPI.Services
+namespace Supermarket.API.Persistence.Repositories
 {
     public class DatingRepository : IDatingRepository
     {

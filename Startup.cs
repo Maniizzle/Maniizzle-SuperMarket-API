@@ -53,6 +53,10 @@ namespace Supermarket.API
 
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));
+            services.AddScoped<IDatingRepository, DatingRepository>();//, typeof(EntityRepository<>));
+            services.AddScoped<IAuthRepository, AuthRepository>();
+
             services.AddCors(c =>
             {
                 c.AddPolicy("FirstCor", coo =>
@@ -76,13 +80,7 @@ namespace Supermarket.API
                      };
                  });
 
-            services.AddMvc(options =>
-            {
-                var policy = new AuthorizationPolicyBuilder
-                                    (JwtBearerDefaults.AuthenticationScheme, "Identity.Application")
-                                    .RequireAuthenticatedUser().Build();
-                options.Filters.Add(new AuthorizeFilter(policy));
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

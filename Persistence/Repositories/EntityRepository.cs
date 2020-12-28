@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DatingAppAPI.Services
+namespace Supermarket.API.Persistence.Repositories
 {
     public class EntityRepository<TEntity> : IEntityRepository<TEntity> where TEntity : class
     {

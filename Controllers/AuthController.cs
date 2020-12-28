@@ -20,6 +20,7 @@ namespace Supermarket.API.Controllers
 {
     [Route("api/auth/")]
     [ApiController]
+    [Authorize]
     public class AuthController : Controller
     {
         private readonly IAuthRepository _repository;
