@@ -4,7 +4,7 @@ An Implementation of a RESTFUL API using Onions Architecture, JWT for Authentica
 
 ## Getting Started
 
-Clone or Download the project to your local system or view Online(https://super-marketapi.herokuapp.com/index.html)
+Clone or Download the project to your local system or view [Online](https://super-marketapi.herokuapp.com/index.html)
 
 ### Prerequisites
 
