@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DatingAppAPI.Data
+namespace Supermarket.API.Persistence.Data
 {
     public class Seed
     {
@@ -22,7 +22,7 @@ namespace DatingAppAPI.Data
             if (_context.Users.Any() == true)
                 return;
 
-            var data = System.IO.File.ReadAllText("Data/UserDataSeed.json");
+            var data = System.IO.File.ReadAllText("Persistence/Data/UserDataSeed.json");
             var users = JsonConvert.DeserializeObject<List<User>>(data);
 
             foreach (var user in users)

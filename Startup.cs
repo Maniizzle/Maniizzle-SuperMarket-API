@@ -24,6 +24,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Supermarket.API.Persistence.Data;
 
 namespace Supermarket.API
 {
@@ -41,6 +42,7 @@ namespace Supermarket.API
         {
             var key = Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:token").Value);
 
+            services.AddTransient<Seed>();
             services.AddAutoMapper(typeof(Startup));
             services.AddDbContext<AppDbContext>(options =>
             {
@@ -84,7 +86,7 @@ namespace Supermarket.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, Seed seeder)
         {
             if (env.IsDevelopment())
             {
@@ -95,6 +97,7 @@ namespace Supermarket.API
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            seeder.SeedData();
             app.UseCors("FirstCor");
             app.UseCustomSwaggerApi();
             app.UseHttpsRedirection();
