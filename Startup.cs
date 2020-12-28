@@ -44,10 +44,30 @@ namespace Supermarket.API
 
             services.AddTransient<Seed>();
             services.AddAutoMapper(typeof(Startup));
+
+            string envVar = Environment.GetEnvironmentVariable("DATABASE_URL");
+            string connectionString = null;
+            if (string.IsNullOrEmpty(envVar))
+            {
+                connectionString = Configuration["Connectionstrings:database"];
+            }
+            else
+            {
+                //parse database URL. Format is postgres://<username>:<password>@<host>/<dbname>
+                var uri = new Uri(envVar);
+                var ddd = uri.ToString().Split('@');
+                var host = ddd[1].Split(':')[0];
+                var username = uri.UserInfo.Split(':')[0];
+                var password = uri.UserInfo.Split(':')[1];
+                connectionString ="Server="+host+ "; Database=" + uri.AbsolutePath.Substring(1) + "; Username=" + username +
+                "; Password=" + password + "; Port=" + uri.Port +
+                "; SSL Mode=Require; Trust Server Certificate=true;";
+            }
             services.AddDbContext<AppDbContext>(options =>
             {
+                options.UseNpgsql(connectionString);
                 // options.UseInMemoryDatabase(("supermarket-api-in-memory"));
-                options.UseSqlite(Configuration.GetConnectionString("Default"));
+                // options.UseSqlite(Configuration.GetConnectionString("Default"));
             });
             // services.AddDbContext<AppDbContext>(x => x.
 

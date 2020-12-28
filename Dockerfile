@@ -7,13 +7,18 @@
 #
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2-stretch AS build-env
 WORKDIR /app
+#COPY *.sln .
+#COPY Supermarket.API/*.csproj Supermarket.API/
+
 COPY *.csproj ./
 RUN dotnet restore 
 COPY . .
+
 #WORKDIR "/src/Supermarket.API"
 #RUN dotnet build "Supermarket.API.csproj" -c Release -o /app/build
 
 #FROM build AS publish
+
 RUN dotnet publish  -c Release -o out
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-stretch-slim
