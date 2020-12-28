@@ -18,26 +18,27 @@ namespace Supermarket.API.Controllers
         private readonly ICategoryService categoryService;
         private readonly IMapper mapper;
 
-        public CategoriesController(ICategoryService categoryService,IMapper mapper)
+        public CategoriesController(ICategoryService categoryService, IMapper mapper)
         {
             this.categoryService = categoryService;
             this.mapper = mapper;
         }
+
         [HttpGet]
         public async Task<IEnumerable<CategoryResource>> GetAllAsync()
         {
             var categories = await categoryService.ListAsync();
             var resources = mapper.Map<IEnumerable<Category>, IEnumerable<CategoryResource>>(categories);
             return resources;
-
         }
+
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] SaveCategoryResource resource)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            var category = mapper.Map<SaveCategoryResource, Category>(resource);    return View();
+            var category = mapper.Map<SaveCategoryResource, Category>(resource);
             var result = await categoryService.SaveAsync(category);
 
             if (!result.Success)
@@ -46,11 +47,10 @@ namespace Supermarket.API.Controllers
             var categoryResource = mapper.Map<Category, CategoryResource>(result.Category);
             return Ok(categoryResource);
         }
-        
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
     }
 }

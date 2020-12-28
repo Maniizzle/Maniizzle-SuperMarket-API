@@ -6,17 +6,18 @@
 #EXPOSE 443
 #
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2-stretch AS build-env
-WORKDIR /src
+WORKDIR /app
 COPY *.csproj ./
 RUN dotnet restore 
 COPY . .
-WORKDIR "/src/Supermarket.API"
+#WORKDIR "/src/Supermarket.API"
 #RUN dotnet build "Supermarket.API.csproj" -c Release -o /app/build
 
-FROM build AS publish
+#FROM build AS publish
 RUN dotnet publish  -c Release -o out
 
-FROM base AS final
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-stretch-slim
 WORKDIR /app
 COPY --from=build-env /app/out .
-ENTRYPOINT ["dotnet", "Supermarket.API.dll"]
+#ENTRYPOINT ["dotnet", "Supermarket.API.dll"]
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet Supermarket.API.dll
