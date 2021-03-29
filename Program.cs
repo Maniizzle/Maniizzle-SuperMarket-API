@@ -22,7 +22,7 @@ namespace Supermarket.API
             {
                 context.Database.EnsureCreated();
             }
-                host.Run();
+            host.Run();
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
