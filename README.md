@@ -1,14 +1,14 @@
 # SuperMarket API
 
-A Basic Implementation of a RESTFUL API using Onions Architecture.
+An Implementation of a RESTFUL API using Onions Architecture, JWT for Authentication,Postgres Db,Docker and  Git Actions for CI/CD .
 
 ## Getting Started
 
-Clone or Download the project to your local system.
+Clone or Download the project to your local system or view [Online](https://super-marketapi.herokuapp.com/index.html)
 
 ### Prerequisites
 
-Tools you need to install to get the application running  and how to install them
+Tools you need to install to get the application running  ON your local
 
 ```
 ```
