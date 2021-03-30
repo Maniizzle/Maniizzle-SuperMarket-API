@@ -19,7 +19,6 @@
     "Supermarket.API": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/values",
       "environmentVariables": {
         "DATABASE_URL": "postgres://bytghuhjfjoejb:bf866a2cc7cc5f5a402aeed4770024cb45380a9b2e44a835162f7eee56d75310@ec2-34-194-198-238.compute-1.amazonaws.com:5432/d6etf6ks1i2gns",
         "ASPNETCORE_ENVIRONMENT": "Development"
