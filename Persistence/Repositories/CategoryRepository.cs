@@ -22,5 +22,11 @@ namespace Supermarket.API.Persistence.Repositories
         {
             return await context.Categories.ToListAsync();
         }
+
+        public  Task<int> SaveAsync(Category category)
+        {
+            context.Categories.AddAsync(category);
+            return  context.SaveChangesAsync();
+        }
     }
 }

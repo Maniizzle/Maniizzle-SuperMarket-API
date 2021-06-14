@@ -44,7 +44,8 @@ namespace Supermarket.API
 
             services.AddTransient<Seed>();
             services.AddAutoMapper(typeof(Startup));
-
+            //caching
+            services.AddResponseCaching();
             string envVar = Environment.GetEnvironmentVariable("DATABASE_URL");
             string connectionString = null;
             if (string.IsNullOrEmpty(envVar))
@@ -76,7 +77,17 @@ namespace Supermarket.API
             services.AddScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));
             services.AddScoped<IDatingRepository, DatingRepository>();//, typeof(EntityRepository<>));
             services.AddScoped<IAuthRepository, AuthRepository>();
-
+           
+            services.AddHttpCacheHeaders((expirationModelConfig)=> 
+            {
+                //Global Registeration
+                expirationModelConfig.MaxAge = 60;
+                expirationModelConfig.CacheLocation = Marvin.Cache.Headers.CacheLocation.Private;
+            },
+            (validationModelConfig)=>
+            {
+                validationModelConfig.MustRevalidate = true;
+            });
             services.AddCors(c =>
             {
                 c.AddPolicy("FirstCor", coo =>
@@ -100,7 +111,11 @@ namespace Supermarket.API
                      };
                  });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(options=>
+            {
+                //configure a profile for Cache
+                options.CacheProfiles.Add("240CacheProfile", new CacheProfile { Duration = 240 });
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -117,6 +132,9 @@ namespace Supermarket.API
             }
             seeder.SeedData();
             app.UseCors("FirstCor");
+            //order of arrangement matters
+            app.UseResponseCaching();
+            app.UseHttpCacheHeaders();
             app.UseCustomSwaggerApi();
             app.UseHttpsRedirection();
             app.UseAuthentication();

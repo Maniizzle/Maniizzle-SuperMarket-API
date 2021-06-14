@@ -24,7 +24,8 @@ namespace Supermarket.API.Services
 
         public async Task<SaveCategoryResponse> SaveAsync(Category category)
         {
-            throw new NotImplementedException();
+            await categoryRepository.SaveAsync(category);
+            return new SaveCategoryResponse(category);
         }
     }
 }

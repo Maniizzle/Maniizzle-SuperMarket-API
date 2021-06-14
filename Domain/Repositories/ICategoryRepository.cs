@@ -9,5 +9,7 @@ namespace Supermarket.API.Domain.Repositories
     public interface ICategoryRepository
     {
         Task<IEnumerable<Category>> ListAsync();
+        Task<int> SaveAsync(Category category);
+
     }
 }

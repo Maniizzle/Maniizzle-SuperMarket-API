@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Marvin.Cache.Headers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Supermarket.API.Domain.Model;
@@ -14,7 +15,7 @@ namespace Supermarket.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class CategoriesController : Controller
     {
         private readonly ICategoryService categoryService;
@@ -27,6 +28,10 @@ namespace Supermarket.API.Controllers
         }
 
         [HttpGet]
+        //public Cache store
+        //[ResponseCache(CacheProfileName = "240CacheProfile")]
+        [HttpCacheExpiration(CacheLocation = CacheLocation.Public,MaxAge =1000)]
+        [HttpCacheValidation(MustRevalidate =false)]
         public async Task<IEnumerable<CategoryResource>> GetAllAsync()
         {
             var categories = await categoryService.ListAsync();
