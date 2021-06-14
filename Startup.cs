@@ -82,7 +82,7 @@ namespace Supermarket.API
             {
                 //Global Registeration
                 expirationModelConfig.MaxAge = 60;
-                expirationModelConfig.CacheLocation = Marvin.Cache.Headers.CacheLocation.Private;
+                expirationModelConfig.CacheLocation = Marvin.Cache.Headers.CacheLocation.Public;
             },
             (validationModelConfig)=>
             {
@@ -133,7 +133,7 @@ namespace Supermarket.API
             seeder.SeedData();
             app.UseCors("FirstCor");
             //order of arrangement matters
-           // app.UseResponseCaching();
+            app.UseResponseCaching();
             app.UseHttpCacheHeaders();
             app.UseCustomSwaggerApi();
             app.UseHttpsRedirection();
