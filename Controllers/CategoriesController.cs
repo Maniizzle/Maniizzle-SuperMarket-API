@@ -15,7 +15,7 @@ namespace Supermarket.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class CategoriesController : Controller
     {
         private readonly ICategoryService categoryService;
