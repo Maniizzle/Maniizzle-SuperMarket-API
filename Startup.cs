@@ -25,6 +25,9 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Supermarket.API.Persistence.Data;
+using AspNetCoreRateLimit;
+using Microsoft.AspNetCore.Http;
+using StackExchange.Redis;
 
 namespace Supermarket.API
 {
@@ -44,6 +47,16 @@ namespace Supermarket.API
 
             services.AddTransient<Seed>();
             services.AddAutoMapper(typeof(Startup));
+
+            //redis
+            // services.AddSingleton<IConnectionMultiplexer>(x => ConnectionMultiplexer.Connect(Configuration.GetValue<string>("RedisConnection")));
+            services.AddSingleton<ICacheService, RedisCacheService>();
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = Configuration.GetValue<string>("RedisConnection");
+                options.InstanceName = "RedisDemo__";
+            });
+            
             //caching
             services.AddResponseCaching();
             string envVar = Environment.GetEnvironmentVariable("DATABASE_URL");
@@ -77,6 +90,7 @@ namespace Supermarket.API
             services.AddScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));
             services.AddScoped<IDatingRepository, DatingRepository>();//, typeof(EntityRepository<>));
             services.AddScoped<IAuthRepository, AuthRepository>();
+
            
             services.AddHttpCacheHeaders((expirationModelConfig)=> 
             {
@@ -88,6 +102,7 @@ namespace Supermarket.API
             {
                 validationModelConfig.MustRevalidate = true;
             });
+            services.AddOptions();
             services.AddCors(c =>
             {
                 c.AddPolicy("FirstCor", coo =>
@@ -116,6 +131,35 @@ namespace Supermarket.API
                 //configure a profile for Cache
                 options.CacheProfiles.Add("240CacheProfile", new CacheProfile { Duration = 240 });
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            //use to store counters and rule for rate limiting
+            services.AddMemoryCache();
+            services.AddInMemoryRateLimiting();
+            services.Configure<IpRateLimitOptions>((options) =>
+            {
+
+                options.GeneralRules = new List<RateLimitRule>
+                {
+                new RateLimitRule()
+                {
+                    Endpoint = "*",
+                    Limit = 7,
+                    Period = "5m"
+                }
+            };
+                //new RateLimitRule()
+                //{
+                //    Endpoint = "*",
+                //    Limit = 3,
+                //    Period = "10s"
+                //};
+            });
+            services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+            services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+
+            //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>(); //register as singleton so as to track all policies and rate counter across request 
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -131,11 +175,13 @@ namespace Supermarket.API
                 app.UseHsts();
             }
             seeder.SeedData();
+            app.UseCustomSwaggerApi();
+
+            app.UseIpRateLimiting();
             app.UseCors("FirstCor");
             //order of arrangement matters
             app.UseResponseCaching();
             app.UseHttpCacheHeaders();
-            app.UseCustomSwaggerApi();
             app.UseHttpsRedirection();
             app.UseAuthentication();
 
