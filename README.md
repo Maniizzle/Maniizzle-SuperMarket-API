@@ -11,11 +11,12 @@ Clone or Download the project to your local system or view [Online](https://supe
 Tools you need to install to get the application running  ON your local
 
 ## Features
--Implementation of Onion Architectural Pattern
--Authentication and Authorization using JWT
--Response Caching(using InMemory)
--Rate Limiting 
--Distributed Cashing using Redis(working Locally only)
+* Implementation of Onion Architectural Pattern
+* Authentication and Authorization using JWT
+* Response Caching(using InMemory)
+* Rate Limiting 
+* Distributed Cashing using Redis(working Locally only)
+* Docker
 
 
 
