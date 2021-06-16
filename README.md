@@ -10,6 +10,17 @@ Clone or Download the project to your local system or view [Online](https://supe
 
 Tools you need to install to get the application running  ON your local
 
+## Features
+-Implementation of Onion Architectural Pattern
+-Authentication and Authorization using JWT
+-Response Caching(using InMemory)
+-Rate Limiting 
+-Distributed Cashing using Redis(working Locally only)
+
+
+
+
+
 ```
 ```
 * [.NETCORE Runtime ](https://dotnet.microsoft.com/download/dotnet-core/thank-you/runtime-desktop-3.1.5-windows-x64-installer)- The FrameWork Used.
